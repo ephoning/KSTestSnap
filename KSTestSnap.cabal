@@ -1,0 +1,38 @@
+Name:                KSTestSnap
+Version:             0.1
+Synopsis:            KS Test utility with Snap framework based REST front-end 
+Description:         Project Description Here
+License:             AllRightsReserved
+Author:              Edgar Honing
+Maintainer:          ehoning@overstock.com
+Stability:           Experimental
+Category:            Web
+Build-type:          Simple
+Cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src/lib
+  exposed-modules:     Lib
+  build-depends:
+                base                      >= 4     && < 5,
+                bytestring                >= 0.9.1 && < 0.11,
+                aeson                     >= 0.7
+
+Executable kstestsnap
+  hs-source-dirs: src/app
+  main-is: Main.hs
+
+  Build-depends:
+                base                      >= 4     && < 5,
+                bytestring                >= 0.9.1 && < 0.11,
+                monad-control             >= 1.0   && < 1.1,
+                mtl                       >= 2     && < 3,
+                snap-core                 >= 1.0   && < 1.1,
+                snap-server               >= 1.0   && < 1.1,
+                KSTestSnap
+
+  if impl(ghc >= 6.12.0)
+    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
+                 -fno-warn-unused-do-bind
+  else
+    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
