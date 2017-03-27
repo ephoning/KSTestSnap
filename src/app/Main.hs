@@ -24,16 +24,15 @@ site =
 
 ksTestHandler :: Snap ()
 ksTestHandler = do
-  
     samples1Param <- getParam "samples1"
     samples2Param <- getParam "samples2"
-    let result = kstest (B.unpack (fromJust samples1Param)) (B.unpack (fromJust samples2Param))
+    let result = handleKSTest (B.unpack (fromJust samples1Param)) (B.unpack (fromJust samples2Param))
     writeBS $ B.pack result
 
 basePath :: String
 basePath = "/Users/ehoning/data/kstest/"
 
-kstest :: String  -> String -> String
-kstest s1 s2 = unsafePerformIO $ loadAndProcess s1Path s2Path
+handleKSTest :: String  -> String -> String
+handleKSTest s1 s2 = unsafePerformIO $ ksTest s1Path s2Path
   where s1Path = basePath ++ s1
         s2Path = basePath ++ s2

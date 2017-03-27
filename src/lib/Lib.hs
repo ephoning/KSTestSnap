@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Lib
-    ( loadAndProcess
+    ( ksTest
     ) where
 
 import qualified Data.ByteString.Lazy as B
@@ -12,6 +12,8 @@ import Data.List
 import GHC.Generics
 import Debug.Trace
 import Text.Printf
+import System.Directory
+import Control.Monad
 
 data KeywordRecord = KeywordRecord { keyword :: String
                                    , max_cpc_latest_prediction :: Double
@@ -28,6 +30,16 @@ type Stat = (Double, Double, Bool)
 
 alpha = 0.025
 
+ksTest :: String -> String -> IO String
+ksTest samplesFilePathA samplesFilePathB = do
+  samplesFilePathAExists <- doesFileExist samplesFilePathA
+  samplesFilePathBExists <- doesFileExist samplesFilePathB
+  if (not samplesFilePathAExists)
+    then return (samplesFilePathA ++ " does not exist")
+    else if (not samplesFilePathBExists)
+         then return (samplesFilePathB ++ " does not exist")
+         else loadAndProcess samplesFilePathA samplesFilePathB
+
 loadAndProcess :: String -> String -> IO String
 loadAndProcess samplesFilePathA samplesFilePathB = do
   inputA <- B.readFile samplesFilePathA
@@ -36,7 +48,7 @@ loadAndProcess samplesFilePathA samplesFilePathB = do
   let inputsB = B.split (BS.c2w '\n') inputB
   let stats = process [inputsA,inputsB]
   return stats
-  
+
 process :: [[B.ByteString]] -> String
 process bss = do
   let samples = byteStrings2CFCoords bss
